@@ -1,0 +1,10 @@
+{
+	first_name:"Marvin",
+	last_name:"Boeck",
+	memberships:["mem1","mem2"] 		//Array
+	adress:{ 				//Objekt
+		street:"Sophienstraße 246",
+		city:"Karlsruhe",
+		}
+
+}

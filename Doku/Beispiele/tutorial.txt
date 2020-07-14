@@ -1,0 +1,82 @@
+Ordner Anlegen in data (db)
+cmd als admin:
+
+//wechsel zu D 
+d:
+//Pfad aufrufen (bin)
+cd D:\01_DHBW\4_Semester\8_SW_Engeneering\E-Portfolio\MongoDb\bin
+//eingabe
+mongod --directoryperdb --dbpath D:\01_DHBW\4_Semester\8_SW_Engeneering\E-Portfolio\MongoDb\data\db --logpath D:\01_DHBW\4_Semester\8_SW_Engeneering\E-Portfolio\MongoDb\log\mongo.log --logappend --install 
+//starten mit 
+net start MongoDb 
+//mongo db shell mit mongo öffnen
+mongo
+//clear anzeige mit 
+cls
+//Anzeigen der vorhandenen Datenbanken mit 
+show dbs
+
+
+
+//neue Datenbank anlegen
+use Tinf18B3
+//prüfen in welcher db man sich befindet pber
+db
+
+//user anlegen
+siehe Skript userAnlegen
+
+//create Collection
+db.createCollection('Studenten');
+//anzeige mit 
+show collections
+
+//daten einfügen
+db.Studenten.insert({Vorname:"Marvin", Nachname:"Boeck"});
+//zeigen der Daten
+db.Studenten.find();
+//mehrere auf einmal auch mit verschiedenen feldern!!!
+db.Studenten.insert([{Vorname:"Niklas", Nachname:"Rajsp"},{Vorname:"Tobi", Nachname:"Buehler", telefon:"0172373737"}]);
+//ggf. schöneres anzeigen der Daten
+db.Studenten.find().pretty();
+
+//updaten mithilfe der uniq id(update muss immer alles angegeben werden sonst wird zb. Name überschrieben)
+db.Studenten.update({"_id": ObjectId("5ef27e55145761c69e95a9e3")},{Vorname:"Marvin", Nachname:"Boeck",telefon:"12345678"});  
+//set Operator
+db.Studenten.update({"_id": ObjectId("5ef27f2b145761c69e95a9e4")},{$set:{telefon:"12345678"}}); 
+//increment
+db.Studenten.update({"_id":ObjectId("5ef27f67145761c69e95a9e6")},{$set:{Alter:10}});  
+db.Studenten.update({"_id":ObjectId("5ef27f67145761c69e95a9e6")},{$inc:{Alter:5}});
+//löschen von feldern
+db.Studenten.update({"_id":ObjectId("5ef27f67145761c69e95a9e6")},{$unset:{Alter:0}});
+//update mit einfügen falls nicht vorhanden
+db.Studenten.update({"_id":ObjectId("6ef27f67145761c69e95a9e6")},{Vorname:"Test", Nachname:"Müller"}); //passiert nichts
+db.Studenten.update({"_id":ObjectId("6ef27f67145761c69e95a9e6")},{Vorname:"Test", Nachname:"Müller"},{upsert: true} );
+
+//rename
+db.Studenten.update({"_id":ObjectId("6ef27f67145761c69e95a9e6")},{$rename:{"Vorname":"Kein Vorname Mehr"}} );
+
+//remove
+db.Studenten.remove({"_id":ObjectId("6ef27f67145761c69e95a9e6")})
+
+//testdaten aus csv mithilfe von Gui und semicolon!!!
+
+//Abfragen
+db.Studenten.find({Vorname:"Marvin"});
+//Abfrage mit or
+db.Studenten.find($or:[{Vorname:"Marvin"},{Vorname:"Niklas"}}]);
+//größer und kleiner operatoren (gt greather than, lt lower than)
+db.Studenten.find({Alter:{$gt: 20});
+
+//sorting alphabetisch
+db.Studenten.find().sort({Nachname:"1"});
+
+//zählen
+db.Studenten.find().count();
+db.Studenten.find(Vorname:"Marvin").count();
+db.Studenten.find().limit(4);
+//kombinationen möglich
+
+//for each
+db.Studenten.find().forEach(function()doc{print("Studenten Name: " +doc.Vorname)});
+
